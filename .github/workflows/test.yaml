@@ -41,9 +41,16 @@ jobs:
       run: vault server -dev -dev-root-token-id=$VAULT_TEST_TOKEN > /dev/null 2>&1 &
     - name: Start consul
       run: consul agent -dev > /dev/null 2>&1 &
+    - name: Check for license
+      run: |
+        export "NOMAD_LICENSE=${{ secret.NOMAD_LICENSE }}" >> $GITHUB_ENV
+        if [[ -z "${NOMAD_LICENSE}" ]]; then
+          echo "license is undefined"
+        else
+          echo "license is defined"
+        fi
     - name: Start nomad
       run: |
-        echo $NOMAD_LICENSE
         sudo nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false
         export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
     - name: Bootstrap nomad
