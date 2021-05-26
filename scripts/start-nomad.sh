@@ -11,14 +11,14 @@ if [ ! -e /tmp/vault-test.pid ]; then
 fi
 
 if [ ! -e /tmp/consul-test.pid ]; then
-    consul agent -dev > /dev/null
+    consul agent -dev
 
     CONSUL_PID=$!
     echo $CONSUL_PID > /tmp/consul-test.pid
 fi
 
 if [ ! -e /tmp/nomad-test.pid ]; then
-    nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false
+    nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false -log-level INFO
     NOMAD_PID=$!
     echo $NOMAD_PID > /tmp/nomad-test.pid
 
