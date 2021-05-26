@@ -39,12 +39,11 @@ jobs:
         ./scripts/getconsul.sh
     - name: Start nomad
       run: |
-        ./scripts/start-nomad.sh
-        echo ::set-env name=TEST_NOMAD_TOKEN::$(cat /tmp/nomad-test.token)
+        bash scripts/start-nomad.sh
+        echo "TEST_NOMAD_TOKEN=$(cat /tmp/nomad-test.token)" >> $GITHUB_ENV
     - name: Run go vet
       run: make vet
-    - name: Run tests
-      run: |
-        ${{ env.TEST_NOMAD_TOKEN }} make testacc
+    - name: Run acceptance tests
+      run: ${{ env.TEST_NOMAD_TOKEN }} make testacc
     - name: Stop nomad
       run: ./scripts/stop-nomad.sh
