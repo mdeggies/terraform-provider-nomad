@@ -43,7 +43,7 @@ jobs:
       run: consul agent -dev > /dev/null 2>&1 &
     - name: Start nomad
       run: |
-        sudo nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false > /dev/null 2>&1 &
+        sudo nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false
         export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
     - name: Bootstrap nomad
       run: |
