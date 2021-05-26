@@ -44,14 +44,17 @@ jobs:
       run: consul agent -dev > /dev/null 2>&1 &
     - name: Start nomad
       run: |
-        sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
-        export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
-    - name: Bootstrap nomad
-      run: |
-        echo ${{ env.TEST_NOMAD_TOKEN }}
-        sleep 10
-        nomad node status
-        http --ignore-stdin POST http://localhost:4646/v1/acl/bootstrap | jq -r '.SecretID' > /tmp/nomad-test.token
+        ./scripts/start-nomad.sh
+    # - name: Start nomad
+    #   run: |
+    #     sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
+    #     export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
+    # - name: Bootstrap nomad
+    #   run: |
+    #     echo ${{ env.TEST_NOMAD_TOKEN }}
+    #     sleep 10
+    #     nomad node status
+    #     http --ignore-stdin POST http://localhost:4646/v1/acl/bootstrap | jq -r '.SecretID' > /tmp/nomad-test.token
     - name: Run go vet
       run: make vet
     - name: Run acceptance tests
