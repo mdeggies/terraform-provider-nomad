@@ -43,7 +43,7 @@ jobs:
       run: consul agent -dev > /dev/null 2>&1 &
     - name: Check for license
       run: |
-        export "NOMAD_LICENSE=${{ secret.NOMAD_LICENSE }}" >> $GITHUB_ENV
+        export "NOMAD_LICENSE=${{ secrets.NOMAD_LICENSE }}" >> $GITHUB_ENV
         if [[ -z "${NOMAD_LICENSE}" ]]; then
           echo "license is undefined"
         else
