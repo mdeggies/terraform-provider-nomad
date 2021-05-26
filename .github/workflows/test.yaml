@@ -41,7 +41,7 @@ jobs:
       run: |
         vault server -dev -dev-root-token-id=$VAULT_TEST_TOKEN > /dev/null 2>&1 &
         consul agent -dev > /dev/null 2>&1 &
-        sudo nomad agent -dev -bind 0.0.0.0 -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false > /dev/null 2>&1 &
+        sudo nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false > /dev/null 2>&1 &
         export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
         sleep 10
         nomad node status
