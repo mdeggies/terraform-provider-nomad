@@ -12,7 +12,6 @@ jobs:
       GO111MODULE: on
       VAULT_TEST_TOKEN: terraform-provider-nomad-token
       VAULT_ADDR: http://localhost:8200
-      NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
     strategy:
       fail-fast: true
       matrix:
@@ -43,8 +42,11 @@ jobs:
     - name: Start consul
       run: consul agent -dev > /dev/null 2>&1 &
     - name: Start nomad
+      env:
+        NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
       run: |
-        ./scripts/start-nomad.sh
+        ./scripts/start-nomad.sh $NOMAD_LICENSE
+              
     # - name: Start nomad
     #   run: |
     #     sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
