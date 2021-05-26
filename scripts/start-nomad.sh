@@ -2,7 +2,7 @@
 
 export VAULT_TEST_TOKEN=terraform-provider-nomad-token
 export VAULT_ADDR=http://localhost:8200
-NOMAD_LICENSE=$1
+export NOMAD_LICENSE=$1
 
 echo "nomad license: $NOMAD_LICENSE"
 
