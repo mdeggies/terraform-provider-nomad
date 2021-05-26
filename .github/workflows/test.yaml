@@ -13,6 +13,7 @@ jobs:
       VAULT_TEST_TOKEN: terraform-provider-nomad-token
       VAULT_ADDR: http://localhost:8200
     strategy:
+      fail-fast: true
       matrix:
         go-version: [1.16.x]
         os: [ubuntu-latest]
@@ -41,13 +42,11 @@ jobs:
     - name: Start nomad
       run: |
         ./scripts/start-nomad.sh
-        echo "TEST_NOMAD_TOKEN=$(echo $NOMAD_TOKEN | cut -c 1-6)" >> $GITHUB_ENV
-        echo $TEST_NOMAD_TOKEN
+        echo ::set-env name=TEST_NOMAD_TOKEN::$(cat /tmp/nomad-test.token)
     - name: Run go vet
       run: make vet
     - name: Run tests
       run: |
-        echo $TEST_NOMAD_TOKEN
-        $TEST_NOMAD_TOKEN make testacc
+        ${{ env.TEST_NOMAD_TOKEN }} make testacc
     - name: Stop nomad
       run: ./scripts/stop-nomad.sh
