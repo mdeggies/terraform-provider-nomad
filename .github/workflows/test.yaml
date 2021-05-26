@@ -46,6 +46,7 @@ jobs:
         sudo nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false > /dev/null 2>&1 &
         export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
     - name: Bootstrap nomad
+      run: |
         echo ${{ env.TEST_NOMAD_TOKEN }}
         sleep 10
         nomad node status
