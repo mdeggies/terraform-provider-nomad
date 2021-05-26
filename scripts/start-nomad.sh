@@ -23,6 +23,8 @@ fi
 
 if [ ! -e /tmp/nomad-test.pid ]; then
     echo "Nomad agent not running, starting it.."
+    echo ${NOMAD_LICENSE} >> /tmp/license.hclic
+    export NOMAD_LICENSE_PATH=/tmp/license.hclic
     sudo nomad agent -dev -bind 0.0.0.0 -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false
     NOMAD_PID=$!
     echo $NOMAD_PID > /tmp/nomad-test.pid
