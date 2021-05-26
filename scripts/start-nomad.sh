@@ -8,7 +8,6 @@ if [ ! -e /tmp/vault-test.pid ]; then
 
     export VAULT_PID=$!
     echo $VAULT_PID > /tmp/vault-test.pid
-fi
 else
     echo "Vault server already running"
 fi
@@ -18,7 +17,6 @@ if [ ! -e /tmp/consul-test.pid ]; then
 
     export CONSUL_PID=$!
     echo $CONSUL_PID > /tmp/consul-test.pid
-fi
 else
     echo "Consul agent already running"
 fi
