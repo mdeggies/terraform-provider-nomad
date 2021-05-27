@@ -44,6 +44,7 @@ jobs:
         NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
       run: |
         ./scripts/start-nomad.sh
+        export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
     # - name: Start nomad
     #   env:
     #     VAULT_TEST_TOKEN: terraform-provider-nomad-token
@@ -52,11 +53,11 @@ jobs:
     #   run: |
     #     sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
     #     export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
-    - name: Bootstrap nomad
-      run: |
-        sleep 10
-        nomad node status
-        http --ignore-stdin POST http://localhost:4646/v1/acl/bootstrap | jq -r '.SecretID' > /tmp/nomad-test.token
+    # - name: Bootstrap nomad
+    #   run: |
+    #     sleep 10
+    #     nomad node status
+    #     http --ignore-stdin POST http://localhost:4646/v1/acl/bootstrap | jq -r '.SecretID' > /tmp/nomad-test.token
     - name: Run go vet
       run: make vet
     - name: Run acceptance tests
