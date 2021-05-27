@@ -2,7 +2,6 @@
 
 export VAULT_TEST_TOKEN=terraform-provider-nomad-token
 export VAULT_ADDR=http://localhost:8200
-export NOMAD_LICENSE=$1
 
 if [ ! -e /tmp/vault-test.pid ]; then
     vault server -dev -dev-root-token-id=$VAULT_TEST_TOKEN > /dev/null 2>&1 &
@@ -24,7 +23,7 @@ fi
 
 if [ ! -e /tmp/nomad-test.pid ]; then
     echo "Nomad agent not running, starting it.."
-    sudo nomad agent -dev -bind 0.0.0.0 -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false
+    sudo nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false
     NOMAD_PID=$!
     echo $NOMAD_PID > /tmp/nomad-test.pid
 

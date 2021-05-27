@@ -10,7 +10,6 @@ jobs:
   test:
     env:
       GO111MODULE: on
-      NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
     strategy:
       fail-fast: true
       matrix:
@@ -41,8 +40,10 @@ jobs:
     - name: Start consul
       run: consul agent -dev > /dev/null 2>&1 &
     - name: Start nomad
+      env:
+        NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
       run: |
-        sh ./scripts/start-nomad.sh $NOMAD_LICENSE
+        ./scripts/start-nomad.sh
     # - name: Start nomad
     #   env:
     #     VAULT_TEST_TOKEN: terraform-provider-nomad-token
