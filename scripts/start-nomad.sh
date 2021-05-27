@@ -31,7 +31,7 @@ if [ ! -e /tmp/nomad-test.pid ]; then
     sleep 10
 
     http --ignore-stdin POST http://localhost:4646/v1/acl/bootstrap | jq -r '.SecretID' > /tmp/nomad-test.token
-    export NOMAD_TOKEN=$(cat /tmp/nomad-test.token)
+    NOMAD_TOKEN=$(cat /tmp/nomad-test.token)
     export NOMAD_TOKEN >> $GITHUB_ENV
 elif [ -e /tmp/nomad-test.token ]; then 
   echo "Nomad agent already running"
