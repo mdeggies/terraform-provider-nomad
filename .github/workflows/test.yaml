@@ -38,6 +38,6 @@ jobs:
       run: |
         ./scripts/start-nomad.sh
     - name: Run acceptance tests
-      run: $NOMAD_TOKEN make testacc
+      run: ${{ env.NOMAD_TOKEN }} make testacc
     - name: Stop nomad
       run: ./scripts/stop-nomad.sh
