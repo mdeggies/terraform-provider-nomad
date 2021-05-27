@@ -41,3 +41,5 @@ jobs:
       run: NOMAD_TOKEN=${{ env.NOMAD_TOKEN }} make testacc
     - name: Stop nomad
       run: ./scripts/stop-nomad.sh
+
+      
