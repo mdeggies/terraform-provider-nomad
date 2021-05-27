@@ -30,6 +30,8 @@ jobs:
     #     password: ${{ secrets.RO_DOCKERHUB_TOKEN }}
     - name: Setup
       run: sudo apt-get -y install httpie
+    - name: Run go vet
+      run: make vet
     - name: Install vault, nomad, consul
       run: |
         ./scripts/getnomad.sh
@@ -41,9 +43,9 @@ jobs:
       run: |
         ./scripts/start-nomad.sh
         export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
-    - name: Run go vet
-      run: make vet
     - name: Run acceptance tests
+      env:
+        NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
       run: sudo ${{ env.TEST_NOMAD_TOKEN }} make testacc
     - name: Stop nomad
       run: ./scripts/stop-nomad.sh
