@@ -35,33 +35,15 @@ jobs:
         ./scripts/getnomad.sh
         ./scripts/getvault.sh
         ./scripts/getconsul.sh
-    - name: Start vault
-      run: vault server -dev -dev-root-token-id=$VAULT_TEST_TOKEN > /dev/null 2>&1 &
-    - name: Start consul
-      run: consul agent -dev > /dev/null 2>&1 &
     - name: Start nomad
       env:
         NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
       run: |
         ./scripts/start-nomad.sh
         export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
-    # - name: Start nomad
-    #   env:
-    #     VAULT_TEST_TOKEN: terraform-provider-nomad-token
-    #     VAULT_ADDR: http://localhost:8200
-    #     NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
-    #   run: |
-    #     sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
-    #     export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
-    # - name: Bootstrap nomad
-    #   run: |
-    #     sleep 10
-    #     nomad node status
-    #     http --ignore-stdin POST http://localhost:4646/v1/acl/bootstrap | jq -r '.SecretID' > /tmp/nomad-test.token
     - name: Run go vet
       run: make vet
     - name: Run acceptance tests
-      run: ${{ env.TEST_NOMAD_TOKEN }} make testacc
+      run: sudo ${{ env.TEST_NOMAD_TOKEN }} make testacc
     - name: Stop nomad
       run: ./scripts/stop-nomad.sh
-
