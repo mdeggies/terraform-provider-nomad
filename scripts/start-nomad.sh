@@ -2,7 +2,7 @@
 
 export VAULT_TEST_TOKEN=terraform-provider-nomad-token
 export VAULT_ADDR=http://localhost:8200
-NOMAD_LICENSE = "$1"
+NOMAD_LICENSE=$1
 
 
 if [ ! -e /tmp/vault-test.pid ]; then
