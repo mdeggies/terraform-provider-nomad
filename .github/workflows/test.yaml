@@ -35,7 +35,7 @@ jobs:
     - name: Start nomad
       env:
         NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
-      run: ./scripts/start-nomad.sh
+      run: ./scripts/start-nomad.sh $NOMAD_LICENSE
     - name: Run acceptance tests
       run: NOMAD_TOKEN=${{ env.NOMAD_TOKEN }} make testacc
     - name: Stop nomad
