@@ -25,8 +25,8 @@ jobs:
       uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
     - name: Setup
       run: sudo apt-get -y install httpie
-    - name: Run go vet
-      run: make vet
+    # - name: Run go vet
+    #   run: make vet
     - name: Install vault, nomad, consul
       run: |
         ./scripts/getnomad.sh
@@ -35,8 +35,7 @@ jobs:
     - name: Start nomad
       env:
         NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
-      run: |
-        ./scripts/start-nomad.sh
+      run: ./scripts/start-nomad.sh
     - name: Run acceptance tests
       run: NOMAD_TOKEN=${{ env.NOMAD_TOKEN }} make testacc
     - name: Stop nomad
