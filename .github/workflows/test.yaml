@@ -6,6 +6,11 @@ on:
     branches:
       - main
       - migrate-to-actions
+env:
+  NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
+  VAULT_TEST_TOKEN: terraform-provider-nomad-token
+  VAULT_ADDR: http://localhost:8200
+
 jobs:
   test:
     env:
@@ -31,19 +36,11 @@ jobs:
         ./scripts/getvault.sh
         ./scripts/getconsul.sh
     - name: Start vault
-      env:
-        VAULT_TEST_TOKEN: terraform-provider-nomad-token
-        VAULT_ADDR: http://localhost:8200
       run: vault server -dev -dev-root-token-id=$VAULT_TEST_TOKEN > /dev/null 2>&1 &
     - name: Start consul
       run: consul agent -dev > /dev/null 2>&1 &
     - name: Start nomad
-      env:
-        NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
-        VAULT_TEST_TOKEN: terraform-provider-nomad-token
-        VAULT_ADDR: http://localhost:8200
       run: |
-        export NOMAD_LICENSE="${{ env.NOMAD_LICENSE }}"
         if ${ NOMAD_LICENSE }; then
           sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
           export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
