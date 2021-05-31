@@ -6,15 +6,12 @@ on:
     branches:
       - main
       - migrate-to-actions
-env:
-  NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
-  VAULT_TEST_TOKEN: terraform-provider-nomad-token
-  VAULT_ADDR: http://localhost:8200
 
 jobs:
   test:
     env:
       GO111MODULE: on
+      CI: true
     strategy:
       fail-fast: true
       matrix:
@@ -35,18 +32,13 @@ jobs:
         ./scripts/getnomad.sh
         ./scripts/getvault.sh
         ./scripts/getconsul.sh
-    - name: Start vault
-      run: vault server -dev -dev-root-token-id=$VAULT_TEST_TOKEN > /dev/null 2>&1 &
-    - name: Start consul
-      run: consul agent -dev > /dev/null 2>&1 &
-    - name: Start nomad
+    - name: Start consul, vault, nomad
+      env: 
+        VAULT_TEST_TOKEN: terraform-provider-nomad-token
+        VAULT_ADDR: http://localhost:8200
+        NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
       run: |
-        sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
-        export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
-    - name: Bootstrap nomad
-      run: |
-        sleep 10
-        http --ignore-stdin POST http://localhost:4646/v1/acl/bootstrap | jq -r '.SecretID' > /tmp/nomad-test.token
+        ./scripts/start-nomad.sh ${ NOMAD_LICENSE }
     # - name: Run go vet
     #   run: make vet
     - name: Run acceptance tests
