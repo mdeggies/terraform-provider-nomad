@@ -41,12 +41,8 @@ jobs:
       run: consul agent -dev > /dev/null 2>&1 &
     - name: Start nomad
       run: |
-        if ${ NOMAD_LICENSE }; then
-          sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
-          export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
-        else
-          echo "NOMAD_LICENSE env var not set"
-        fi
+        sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
+        export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
     - name: Bootstrap nomad
       run: |
         sleep 10
