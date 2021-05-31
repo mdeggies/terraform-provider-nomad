@@ -43,8 +43,12 @@ jobs:
         VAULT_TEST_TOKEN: terraform-provider-nomad-token
         VAULT_ADDR: http://localhost:8200
       run: |
-        sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
-        export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
+        if ${NOMAD_LICENSE}; then
+          sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
+          export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
+        else
+          echo "NOMAD_LICENSE env var not set"
+        fi
     - name: Bootstrap nomad
       run: |
         sleep 10
