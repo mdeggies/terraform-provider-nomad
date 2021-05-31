@@ -38,7 +38,7 @@ jobs:
         VAULT_ADDR: http://localhost:8200
         NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
       run: |
-        ./scripts/start-nomad.sh ${ NOMAD_LICENSE }
+        ./scripts/start-nomad.sh ${NOMAD_LICENSE}
     # - name: Run go vet
     #   run: make vet
     - name: Run acceptance tests
