@@ -44,7 +44,7 @@ jobs:
         VAULT_ADDR: http://localhost:8200
       run: |
         export NOMAD_LICENSE = ${{ env.NOMAD_LICENSE }}
-        if ${{ NOMAD_LICENSE }}; then
+        if ${ NOMAD_LICENSE }; then
           sudo nomad agent -dev -acl-enabled -vault-address=${{ env.VAULT_ADDR }} -vault-token ${{ env.VAULT_TEST_TOKEN }} -vault-enabled -vault-allow-unauthenticated=false
           export "TEST_NOMAD_TOKEN=$!" >> $GITHUB_ENV
         else
