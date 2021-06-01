@@ -18,7 +18,7 @@ if [ ! -e /tmp/consul-test.pid ]; then
 fi
 
 if [ ! -e /tmp/nomad-test.pid ]; then
-    sudo nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false
+    sudo nomad agent -dev -acl-enabled -vault-address=$VAULT_ADDR -vault-token $VAULT_TEST_TOKEN -vault-enabled -vault-allow-unauthenticated=false > /dev/null 2>&1 &
     NOMAD_PID=$!
     echo $NOMAD_PID > /tmp/nomad-test.pid
 
