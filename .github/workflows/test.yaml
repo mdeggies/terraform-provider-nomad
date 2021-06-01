@@ -34,11 +34,9 @@ jobs:
         ./scripts/getconsul.sh
     - name: Start consul, vault, nomad
       env: 
-        VAULT_TEST_TOKEN: terraform-provider-nomad-token
-        VAULT_ADDR: http://localhost:8200
         NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
       run: |
-        ./scripts/start-nomad.sh ${NOMAD_LICENSE}
+        ./scripts/start-nomad.sh
     # - name: Run go vet
     #   run: make vet
     - name: Run acceptance tests
