@@ -35,6 +35,16 @@ jobs:
         env:
           NOMAD_LICENSE: ${{ secrets.NOMAD_LICENSE }}
         run: ./scripts/start-nomad.sh
+      - name: Upload logs
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: logs
+          path: |
+            /tmp/consul.log
+            /tmp/nomad.log
+            /tmp/vault.log
+        if-no-files-found: warn
       - name: Run acceptance tests
         run: NOMAD_TOKEN=${{ env.NOMAD_TOKEN }} make testacc
       - name: Stop nomad
@@ -48,4 +58,3 @@ jobs:
             /tmp/consul.log
             /tmp/nomad.log
             /tmp/vault.log
-            
