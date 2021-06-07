@@ -44,7 +44,7 @@ jobs:
             /tmp/consul.log
             /tmp/nomad.log
             /tmp/vault.log
-        if-no-files-found: warn
+          if-no-files-found: warn
       - name: Run acceptance tests
         run: NOMAD_TOKEN=${{ env.NOMAD_TOKEN }} make testacc
       - name: Stop nomad
