@@ -5,6 +5,9 @@ set -e
 export VAULT_TEST_TOKEN=terraform-provider-nomad-token
 export VAULT_ADDR=http://localhost:8200
 
+echo "Validate that NOMAD_LICENSE env var is set"
+env | grep "NOMAD_LICENSE"
+
 if [ ! -e /tmp/vault-test.pid ]; then
     vault server -dev -dev-root-token-id=$VAULT_TEST_TOKEN > /tmp/vault.log 2>&1 &
 
